@@ -1,0 +1,163 @@
+import React, { useState } from 'react';
+import { Layout, Columns, Rows, Square, Layers, Phone, Info, Code } from 'lucide-react';
+
+const App = () => {
+  const [activeConcept, setActiveConcept] = useState('column');
+
+  const concepts = {
+    column: {
+      title: "Column (Coluna)",
+      description: "Organiza os elementos verticalmente, um embaixo do outro.",
+      code: "Column {\n  Text(\"Item 1\")\n  Text(\"Item 2\")\n  Text(\"Item 3\")\n}",
+      color: "bg-blue-500"
+    },
+    row: {
+      title: "Row (Linha)",
+      description: "Organiza os elementos horizontalmente, um ao lado do outro.",
+      code: "Row {\n  Icon(Logo)\n  Text(\"Nome\")\n  Button(\"OK\")\n}",
+      color: "bg-green-500"
+    },
+    box: {
+      title: "Box (Caixa/Sobreposição)",
+      description: "Empilha elementos um em cima do outro (como camadas).",
+      code: "Box {\n  Image(Fundo)\n  Text(\"Título sobre a imagem\", \n       modifier = Modifier.align(Alignment.Center))\n}",
+      color: "bg-purple-500"
+    },
+    scaffold: {
+      title: "Scaffold (Estrutura)",
+      description: "A casca do app: define onde fica a TopBar, o conteúdo e o menu inferior.",
+      code: "Scaffold(\n  topBar = { TopAppBar(...) },\n  bottomBar = { BottomBar(...) }\n) { content -> ... }",
+      color: "bg-orange-500"
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white p-4 font-sans">
+      <div className="max-w-4xl mx-auto">
+        <header className="mb-8 text-center">
+          <h1 className="text-3xl font-bold mb-2">Como funcionam os Layouts em Kotlin?</h1>
+          <p className="text-gray-400">Imagine que seu app é feito de blocos aninhados.</p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          {/* Visual Canvas (O "Desenho") */}
+          <div className="bg-gray-800 rounded-3xl p-6 border-4 border-gray-700 shadow-2xl relative overflow-hidden flex justify-center">
+            <div className="w-64 h-[450px] bg-black rounded-[3rem] border-8 border-gray-600 relative p-4 flex flex-col shadow-inner">
+              {/* Top Bar Area */}
+              <div className={`h-12 w-full rounded-t-lg mb-2 flex items-center justify-center text-xs font-bold ${activeConcept === 'scaffold' ? 'bg-orange-400 ring-4 ring-white animate-pulse' : 'bg-gray-700'}`}>
+                TOP BAR
+              </div>
+
+              {/* Main Content Area */}
+              <div className="flex-1 w-full bg-gray-900 rounded-lg p-2 flex flex-col gap-2 overflow-hidden border border-gray-700">
+                {activeConcept === 'column' && (
+                  <div className="flex flex-col gap-2 h-full animate-in fade-in slide-in-from-bottom-2">
+                    <div className="h-10 w-full bg-blue-500 rounded flex items-center justify-center text-[10px]">Elemento 1</div>
+                    <div className="h-10 w-full bg-blue-400 rounded flex items-center justify-center text-[10px]">Elemento 2</div>
+                    <div className="h-10 w-full bg-blue-300 rounded flex items-center justify-center text-[10px]">Elemento 3</div>
+                  </div>
+                )}
+
+                {activeConcept === 'row' && (
+                  <div className="flex flex-row gap-2 w-full animate-in fade-in slide-in-from-left-2">
+                    <div className="h-16 w-1/3 bg-green-500 rounded flex items-center justify-center text-[10px]">E1</div>
+                    <div className="h-16 w-1/3 bg-green-400 rounded flex items-center justify-center text-[10px]">E2</div>
+                    <div className="h-16 w-1/3 bg-green-300 rounded flex items-center justify-center text-[10px]">E3</div>
+                  </div>
+                )}
+
+                {activeConcept === 'box' && (
+                  <div className="relative h-40 w-full bg-gray-800 rounded overflow-hidden animate-in zoom-in-95">
+                    <div className="absolute inset-0 bg-purple-600 opacity-50"></div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-black px-2 py-1 rounded text-[10px] font-bold shadow-lg">
+                      Texto no Topo
+                    </div>
+                    <div className="absolute bottom-2 right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-black text-[8px] font-bold">
+                      Ícone
+                    </div>
+                  </div>
+                )}
+
+                {activeConcept === 'scaffold' && (
+                  <div className="flex flex-col gap-2 opacity-50">
+                    <div className="h-4 w-full bg-gray-600 rounded"></div>
+                    <div className="h-20 w-full bg-orange-200 rounded"></div>
+                    <div className="h-4 w-2/3 bg-gray-600 rounded"></div>
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom Bar Area */}
+              <div className={`h-10 w-full rounded-b-lg mt-2 flex items-center justify-around ${activeConcept === 'scaffold' ? 'bg-orange-400 ring-4 ring-white animate-pulse' : 'bg-gray-700'}`}>
+                <div className="w-4 h-4 rounded-full bg-white/20"></div>
+                <div className="w-4 h-4 rounded-full bg-white/20"></div>
+                <div className="w-4 h-4 rounded-full bg-white/20"></div>
+              </div>
+
+              {/* Home Indicator */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16 h-1 bg-gray-500 rounded-full"></div>
+            </div>
+          </div>
+
+          {/* Controls & Explanation */}
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <button 
+                onClick={() => setActiveConcept('column')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${activeConcept === 'column' ? 'bg-blue-600 ring-2 ring-white' : 'bg-gray-800 hover:bg-gray-700'}`}
+              >
+                <Rows size={16} /> Column
+              </button>
+              <button 
+                onClick={() => setActiveConcept('row')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${activeConcept === 'row' ? 'bg-green-600 ring-2 ring-white' : 'bg-gray-800 hover:bg-gray-700'}`}
+              >
+                <Columns size={16} /> Row
+              </button>
+              <button 
+                onClick={() => setActiveConcept('box')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${activeConcept === 'box' ? 'bg-purple-600 ring-2 ring-white' : 'bg-gray-800 hover:bg-gray-700'}`}
+              >
+                <Layers size={16} /> Box
+              </button>
+              <button 
+                onClick={() => setActiveConcept('scaffold')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${activeConcept === 'scaffold' ? 'bg-orange-600 ring-2 ring-white' : 'bg-gray-800 hover:bg-gray-700'}`}
+              >
+                <Layout size={16} /> Scaffold
+              </button>
+            </div>
+
+            <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 min-h-[250px] flex flex-col justify-between">
+              <div>
+                <h2 className={`text-xl font-bold mb-2 flex items-center gap-2 ${concepts[activeConcept].color.replace('bg-', 'text-')}`}>
+                  <Info size={20} /> {concepts[activeConcept].title}
+                </h2>
+                <p className="text-gray-300 leading-relaxed mb-4">
+                  {concepts[activeConcept].description}
+                </p>
+              </div>
+
+              <div className="bg-black/50 p-4 rounded-lg border border-white/10 font-mono text-sm">
+                <div className="flex items-center gap-2 text-gray-500 mb-2 border-b border-white/5 pb-1">
+                  <Code size={14} /> Kotlin / Jetpack Compose
+                </div>
+                <pre className="text-blue-300 whitespace-pre-wrap">
+                  {concepts[activeConcept].code}
+                </pre>
+              </div>
+            </div>
+            
+            <div className="bg-yellow-900/20 border border-yellow-700/50 p-4 rounded-xl">
+              <p className="text-sm text-yellow-200 italic">
+                <strong>Dica:</strong> Em Kotlin, tudo é uma função chamada "Composable". Você coloca uma função dentro da outra para criar a árvore visual.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
